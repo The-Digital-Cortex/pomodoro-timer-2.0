@@ -42,6 +42,7 @@ longBreakOption.addEventListener("click", () => {
 startButton.addEventListener("click", () => {
     if (isRunning) return; // Prevent multiple timers
     isRunning = true;
+
     let totalSeconds = parseInt(minutesDisplay.textContent) * 60 + parseInt(secondsDisplay.textContent);
     
     timer = setInterval(() => {
