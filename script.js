@@ -1,101 +1,101 @@
-let focusTime = 25; // Default focus time in minutes
-let shortBreakTime = 5; // Default short break time in minutes
-let longBreakTime = 15; // Default long break time in minutes
-let timer; // Timer variable
-let isRunning = false; // Timer state
-let timeRemaining; // Time remaining in seconds
+document.addEventListener("DOMContentLoaded", function() {
+    let timerElement = document.getElementById("timer");
+    let startButton = document.getElementById("startButton");
+    let resetButton = document.getElementById("resetButton");
+    let settingsButton = document.getElementById("settingsButton");
+    
+    let focusButton = document.getElementById("focusButton");
+    let shortBreakButton = document.getElementById("shortBreakButton");
+    let longBreakButton = document.getElementById("longBreakButton");
 
-const minutesDisplay = document.getElementById("minutes");
-const secondsDisplay = document.getElementById("seconds");
-const settingsModal = document.getElementById("settingsModal");
-const saveSettingsButton = document.getElementById("saveSettings");
-const closeModal = document.getElementById("closeModal");
+    let settingsModal = document.getElementById("settingsModal");
+    let closeModalButton = document.getElementById("closeModalButton");
 
-// Event listeners for preset buttons
-document.getElementById("focusOption").addEventListener("click", () => {
-    timeRemaining = focusTime * 60; // Set time for focus
-    updateTimerDisplay(focusTime, 0); // Update display
-});
+    let customFocusInput = document.getElementById("customFocus");
+    let customShortBreakInput = document.getElementById("customShortBreak");
+    let customLongBreakInput = document.getElementById("customLongBreak");
 
-document.getElementById("shortBreakOption").addEventListener("click", () => {
-    timeRemaining = shortBreakTime * 60; // Set time for short break
-    updateTimerDisplay(shortBreakTime, 0); // Update display
-});
+    let backgroundColorInput = document.getElementById("backgroundColor");
+    let fontColorInput = document.getElementById("fontColor");
 
-document.getElementById("longBreakOption").addEventListener("click", () => {
-    timeRemaining = longBreakTime * 60; // Set time for long break
-    updateTimerDisplay(longBreakTime, 0); // Update display
-});
+    let pageContainer = document.querySelector("body");
 
-// Start button functionality
-document.getElementById("start").addEventListener("click", () => {
-    if (!isRunning) {
-        startTimer();
-    }
-});
+    let time = 1500; // Default focus time (25 minutes)
+    let countdownInterval = null;
 
-// Reset button functionality
-document.getElementById("reset").addEventListener("click", () => {
-    resetTimer();
-});
+    // Event Listeners for the top preset buttons
+    focusButton.addEventListener("click", function() {
+        stopTimer(); // Ensure the timer does not start
+        time = customFocusInput.value ? customFocusInput.value * 60 : 1500; // Use custom focus time or default
+        updateTimerDisplay();
+    });
 
-// Open settings modal
-document.getElementById("settings").addEventListener("click", () => {
-    settingsModal.style.display = "block";
-});
+    shortBreakButton.addEventListener("click", function() {
+        stopTimer(); // Ensure the timer does not start
+        time = customShortBreakInput.value ? customShortBreakInput.value * 60 : 300; // Use custom short break or default
+        updateTimerDisplay();
+    });
 
-// Close settings modal
-closeModal.addEventListener("click", () => {
-    settingsModal.style.display = "none";
-});
+    longBreakButton.addEventListener("click", function() {
+        stopTimer(); // Ensure the timer does not start
+        time = customLongBreakInput.value ? customLongBreakInput.value * 60 : 900; // Use custom long break or default
+        updateTimerDisplay();
+    });
 
-// Save settings when the save button is clicked
-saveSettingsButton.addEventListener("click", () => {
-    // Update time values from input fields
-    focusTime = parseInt(document.getElementById("focusTime").value) || focusTime;
-    shortBreakTime = parseInt(document.getElementById("shortBreak").value) || shortBreakTime;
-    longBreakTime = parseInt(document.getElementById("longBreak").value) || longBreakTime;
-
-    // Update display when saving settings
-    updateTimerDisplay(focusTime, 0);
-    settingsModal.style.display = "none"; // Hide settings modal
-
-    // Update the color settings
-    const fontColor = document.getElementById("fontColor").value;
-    const backgroundColor = document.getElementById("backgroundColor").value;
-
-    document.body.style.color = fontColor; // Change font color
-    document.body.style.backgroundColor = backgroundColor; // Change background color
-    document.body.style.borderColor = backgroundColor; // Change border color to match background
-});
-
-// Timer function
-function startTimer() {
-    if (timeRemaining <= 0) return; // Prevent starting if no time left
-    isRunning = true;
-
-    timer = setInterval(() => {
-        if (timeRemaining <= 0) {
-            clearInterval(timer);
-            isRunning = false;
-            alert("Time's up!");
-            return;
+    // Start timer only when start button is clicked
+    startButton.addEventListener("click", function() {
+        if (countdownInterval === null) {
+            startTimer();
         }
-        timeRemaining--; // Decrease remaining time
-        updateTimerDisplay(Math.floor(timeRemaining / 60), timeRemaining % 60); // Update display
-    }, 1000);
-}
+    });
 
-// Update timer display
-function updateTimerDisplay(minutes, seconds) {
-    minutesDisplay.textContent = String(minutes).padStart(2, '0'); // Display minutes
-    secondsDisplay.textContent = String(seconds).padStart(2, '0'); // Display seconds
-}
+    // Reset the timer
+    resetButton.addEventListener("click", function() {
+        stopTimer();
+        updateTimerDisplay();
+    });
 
-// Reset timer function
-function resetTimer() {
-    clearInterval(timer);
-    isRunning = false;
-    timeRemaining = focusTime * 60; // Reset to default focus time
-    updateTimerDisplay(focusTime, 0);
-}
+    // Open settings modal
+    settingsButton.addEventListener("click", function() {
+        settingsModal.style.display = "block";
+    });
+
+    // Close settings modal
+    closeModalButton.addEventListener("click", function() {
+        settingsModal.style.display = "none";
+    });
+
+    // Change background color and font color
+    document.getElementById("applyColors").addEventListener("click", function() {
+        pageContainer.style.backgroundColor = backgroundColorInput.value;
+        timerElement.style.color = fontColorInput.value;
+    });
+
+    // Update the timer display
+    function updateTimerDisplay() {
+        let minutes = Math.floor(time / 60);
+        let seconds = time % 60;
+        timerElement.textContent = `${minutes}:${seconds < 10 ? "0" + seconds : seconds}`;
+    }
+
+    // Start the countdown timer
+    function startTimer() {
+        countdownInterval = setInterval(function() {
+            if (time > 0) {
+                time--;
+                updateTimerDisplay();
+            } else {
+                stopTimer(); // Stop timer when time reaches zero
+            }
+        }, 1000);
+    }
+
+    // Stop the countdown timer
+    function stopTimer() {
+        clearInterval(countdownInterval);
+        countdownInterval = null;
+    }
+
+    // Initialize the timer display
+    updateTimerDisplay();
+});
