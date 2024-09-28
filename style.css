@@ -1,11 +1,12 @@
 body {
     font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    height: 100vh; /* Ensure the body covers the entire viewport height */
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    margin: 0;
-    background-color: #f4f4f4;
+    background-color: #f4f4f4; /* Default background */
 }
 
 .container {
@@ -14,6 +15,9 @@ body {
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border: 5px solid black; /* Full page border */
+    width: 100%;
+    max-width: 600px; /* Optional: Limit the width for larger screens */
 }
 
 .options {
