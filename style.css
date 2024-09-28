@@ -12,6 +12,10 @@ body {
 
 .container {
     text-align: center; /* Center content */
+    display: flex; /* Use flexbox to center vertically */
+    flex-direction: column; /* Stack elements vertically */
+    justify-content: center; /* Center items vertically */
+    align-items: center; /* Center items horizontally */
 }
 
 .button-container {
