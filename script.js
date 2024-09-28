@@ -17,34 +17,25 @@ const saveSettingsButton = document.getElementById("saveSettings");
 const settingsModal = document.getElementById("settingsModal");
 const closeModalButton = document.getElementById("closeModal");
 
-// Function to reset the timer display
-function resetTimerDisplay() {
-    const totalSeconds = focusTime * 60; // Default to focus time
-    const minutes = Math.floor(totalSeconds / 60);
-    const seconds = totalSeconds % 60;
+// Function to reset the timer display based on selected time
+function updateTimerDisplay(minutes, seconds) {
     minutesDisplay.textContent = String(minutes).padStart(2, '0');
     secondsDisplay.textContent = String(seconds).padStart(2, '0');
 }
 
 // Set focus time on button click
 focusOption.addEventListener("click", () => {
-    resetTimerDisplay(); // Reset the display when selecting a preset
-    minutesDisplay.textContent = String(focusTime).padStart(2, '0');
-    secondsDisplay.textContent = '00';
+    updateTimerDisplay(focusTime, 0); // Set timer to focus time without starting it
 });
 
 // Set short break time on button click
 shortBreakOption.addEventListener("click", () => {
-    resetTimerDisplay(); // Reset the display when selecting a preset
-    minutesDisplay.textContent = String(shortBreakTime).padStart(2, '0');
-    secondsDisplay.textContent = '00';
+    updateTimerDisplay(shortBreakTime, 0); // Set timer to short break time without starting it
 });
 
 // Set long break time on button click
 longBreakOption.addEventListener("click", () => {
-    resetTimerDisplay(); // Reset the display when selecting a preset
-    minutesDisplay.textContent = String(longBreakTime).padStart(2, '0');
-    secondsDisplay.textContent = '00';
+    updateTimerDisplay(longBreakTime, 0); // Set timer to long break time without starting it
 });
 
 // Start the timer
@@ -62,8 +53,7 @@ startButton.addEventListener("click", () => {
         totalSeconds--;
         const minutes = Math.floor(totalSeconds / 60);
         const seconds = totalSeconds % 60;
-        minutesDisplay.textContent = String(minutes).padStart(2, '0');
-        secondsDisplay.textContent = String(seconds).padStart(2, '0');
+        updateTimerDisplay(minutes, seconds);
     }, 1000);
 });
 
@@ -71,7 +61,7 @@ startButton.addEventListener("click", () => {
 resetButton.addEventListener("click", () => {
     clearInterval(timer);
     isRunning = false;
-    resetTimerDisplay(); // Reset to the default time
+    updateTimerDisplay(focusTime, 0); // Reset to the default focus time
 });
 
 // Open the settings modal
@@ -89,11 +79,11 @@ saveSettingsButton.addEventListener("click", () => {
     focusTime = parseInt(document.getElementById("focusTime").value) || focusTime;
     shortBreakTime = parseInt(document.getElementById("shortBreak").value) || shortBreakTime;
     longBreakTime = parseInt(document.getElementById("longBreak").value) || longBreakTime;
-    
+
     // Update display when saving settings
-    resetTimerDisplay(); 
+    updateTimerDisplay(focusTime, 0);
     settingsModal.style.display = "none";
-    
+
     // Update the color settings
     const fontColor = document.getElementById("fontColor").value;
     const backgroundColor = document.getElementById("backgroundColor").value;
