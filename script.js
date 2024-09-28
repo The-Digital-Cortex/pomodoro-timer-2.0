@@ -1,82 +1,52 @@
 let focusTime = 25; // Default focus time in minutes
 let shortBreakTime = 5; // Default short break time in minutes
 let longBreakTime = 15; // Default long break time in minutes
-let timer; // Variable to store the timer
-let isRunning = false; // Flag to check if the timer is running
+let timer; // Timer variable
+let isRunning = false; // Timer state
+let timeRemaining; // Time remaining in seconds
 
 const minutesDisplay = document.getElementById("minutes");
 const secondsDisplay = document.getElementById("seconds");
-
-const focusOption = document.getElementById("focusOption");
-const shortBreakOption = document.getElementById("shortBreakOption");
-const longBreakOption = document.getElementById("longBreakOption");
-const startButton = document.getElementById("start");
-const resetButton = document.getElementById("reset");
-const settingsButton = document.getElementById("settings");
-const saveSettingsButton = document.getElementById("saveSettings");
 const settingsModal = document.getElementById("settingsModal");
-const closeModalButton = document.getElementById("closeModal");
+const saveSettingsButton = document.getElementById("saveSettings");
+const closeModal = document.getElementById("closeModal");
 
-// Function to update timer display
-function updateTimerDisplay(minutes, seconds) {
-    minutesDisplay.textContent = String(minutes).padStart(2, '0');
-    secondsDisplay.textContent = String(seconds).padStart(2, '0');
-}
-
-// Set focus time on button click without starting the timer
-focusOption.addEventListener("click", () => {
-    if (isRunning) return; // Prevent changing time if the timer is running
-    updateTimerDisplay(focusTime, 0); // Update display to focus time
+// Event listeners for preset buttons
+document.getElementById("focusOption").addEventListener("click", () => {
+    timeRemaining = focusTime * 60; // Set time for focus
+    updateTimerDisplay(focusTime, 0); // Update display
 });
 
-// Set short break time on button click without starting the timer
-shortBreakOption.addEventListener("click", () => {
-    if (isRunning) return; // Prevent changing time if the timer is running
-    updateTimerDisplay(shortBreakTime, 0); // Update display to short break time
+document.getElementById("shortBreakOption").addEventListener("click", () => {
+    timeRemaining = shortBreakTime * 60; // Set time for short break
+    updateTimerDisplay(shortBreakTime, 0); // Update display
 });
 
-// Set long break time on button click without starting the timer
-longBreakOption.addEventListener("click", () => {
-    if (isRunning) return; // Prevent changing time if the timer is running
-    updateTimerDisplay(longBreakTime, 0); // Update display to long break time
+document.getElementById("longBreakOption").addEventListener("click", () => {
+    timeRemaining = longBreakTime * 60; // Set time for long break
+    updateTimerDisplay(longBreakTime, 0); // Update display
 });
 
-// Start the timer when the start button is clicked
-startButton.addEventListener("click", () => {
-    if (isRunning) return; // Prevent starting multiple timers
-    isRunning = true;
-
-    // Get the current time in seconds from the display
-    let totalSeconds = parseInt(minutesDisplay.textContent) * 60 + parseInt(secondsDisplay.textContent);
-    
-    timer = setInterval(() => {
-        if (totalSeconds <= 0) {
-            clearInterval(timer);
-            isRunning = false;
-            return;
-        }
-        totalSeconds--; // Decrement total seconds
-        const minutes = Math.floor(totalSeconds / 60);
-        const seconds = totalSeconds % 60;
-        updateTimerDisplay(minutes, seconds); // Update the timer display
-    }, 1000);
+// Start button functionality
+document.getElementById("start").addEventListener("click", () => {
+    if (!isRunning) {
+        startTimer();
+    }
 });
 
-// Reset the timer when the reset button is clicked
-resetButton.addEventListener("click", () => {
-    clearInterval(timer); // Stop the timer
-    isRunning = false; // Reset the running flag
-    updateTimerDisplay(focusTime, 0); // Reset to the default focus time
+// Reset button functionality
+document.getElementById("reset").addEventListener("click", () => {
+    resetTimer();
 });
 
-// Open the settings modal when the settings button is clicked
-settingsButton.addEventListener("click", () => {
-    settingsModal.style.display = "block"; // Show settings modal
+// Open settings modal
+document.getElementById("settings").addEventListener("click", () => {
+    settingsModal.style.display = "block";
 });
 
-// Close the settings modal when the close button is clicked
-closeModalButton.addEventListener("click", () => {
-    settingsModal.style.display = "none"; // Hide settings modal
+// Close settings modal
+closeModal.addEventListener("click", () => {
+    settingsModal.style.display = "none";
 });
 
 // Save settings when the save button is clicked
@@ -96,4 +66,36 @@ saveSettingsButton.addEventListener("click", () => {
 
     document.body.style.color = fontColor; // Change font color
     document.body.style.backgroundColor = backgroundColor; // Change background color
+    document.body.style.borderColor = backgroundColor; // Change border color to match background
 });
+
+// Timer function
+function startTimer() {
+    if (timeRemaining <= 0) return; // Prevent starting if no time left
+    isRunning = true;
+
+    timer = setInterval(() => {
+        if (timeRemaining <= 0) {
+            clearInterval(timer);
+            isRunning = false;
+            alert("Time's up!");
+            return;
+        }
+        timeRemaining--; // Decrease remaining time
+        updateTimerDisplay(Math.floor(timeRemaining / 60), timeRemaining % 60); // Update display
+    }, 1000);
+}
+
+// Update timer display
+function updateTimerDisplay(minutes, seconds) {
+    minutesDisplay.textContent = String(minutes).padStart(2, '0'); // Display minutes
+    secondsDisplay.textContent = String(seconds).padStart(2, '0'); // Display seconds
+}
+
+// Reset timer function
+function resetTimer() {
+    clearInterval(timer);
+    isRunning = false;
+    timeRemaining = focusTime * 60; // Reset to default focus time
+    updateTimerDisplay(focusTime, 0);
+}
