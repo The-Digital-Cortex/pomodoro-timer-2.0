@@ -22,10 +22,14 @@ function loadSettings() {
     if (savedFocusTime) focusTime = parseInt(savedFocusTime);
     if (savedShortBreak) shortBreakTime = parseInt(savedShortBreak);
     if (savedLongBreak) longBreakTime = parseInt(savedLongBreak);
-    if (savedFontColor) document.body.style.color = savedFontColor; // Apply to body text
+    if (savedFontColor) {
+        document.body.style.color = savedFontColor; // Apply to body text
+        document.getElementById("fontColor").value = savedFontColor; // Set input value
+    }
     if (savedBackgroundColor) {
         document.body.style.backgroundColor = savedBackgroundColor; // Change background color
         document.body.style.borderColor = savedBackgroundColor; // Change border color to match background
+        document.getElementById("backgroundColor").value = savedBackgroundColor; // Set input value
     }
 
     updateTimerDisplay(focusTime, 0); // Update display with loaded settings
