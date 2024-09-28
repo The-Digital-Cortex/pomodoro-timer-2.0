@@ -26,6 +26,7 @@ body {
     margin-top: 20px; /* Spacing above control buttons */
 }
 
+/* Modal Styles */
 .modal {
     display: none; /* Hide modal by default */
     position: fixed; /* Fixed position */
@@ -46,12 +47,13 @@ body {
     width: 80%; /* Width of modal */
 }
 
-.modal-content * {
+/* Ensuring text in modal is black */
+.modal-content, .modal-content * {
     color: black !important; /* Ensure all text inside modal remains black */
 }
 
 .close {
-    color: #aaa; /* Close button color */
+    color: black; /* Close button color */
     float: right; /* Align right */
     font-size: 28px; /* Font size */
     font-weight: bold; /* Bold font */
@@ -59,7 +61,7 @@ body {
 
 .close:hover,
 .close:focus {
-    color: black; /* Color on hover */
+    color: darkred; /* Color on hover */
     text-decoration: none; /* No underline */
     cursor: pointer; /* Pointer cursor */
 }
