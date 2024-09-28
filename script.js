@@ -22,9 +22,9 @@ function loadSettings() {
     if (savedFocusTime) focusTime = parseInt(savedFocusTime);
     if (savedShortBreak) shortBreakTime = parseInt(savedShortBreak);
     if (savedLongBreak) longBreakTime = parseInt(savedLongBreak);
-    if (savedFontColor) document.body.style.color = savedFontColor;
+    if (savedFontColor) document.body.style.color = savedFontColor; // Apply to body text
     if (savedBackgroundColor) {
-        document.body.style.backgroundColor = savedBackgroundColor;
+        document.body.style.backgroundColor = savedBackgroundColor; // Change background color
         document.body.style.borderColor = savedBackgroundColor; // Change border color to match background
     }
 
@@ -89,7 +89,7 @@ saveSettingsButton.addEventListener("click", () => {
     const fontColor = document.getElementById("fontColor").value;
     const backgroundColor = document.getElementById("backgroundColor").value;
 
-    document.body.style.color = fontColor; // Change font color
+    document.body.style.color = fontColor; // Change font color of the body
     document.body.style.backgroundColor = backgroundColor; // Change background color
 
     // Save color settings to localStorage
