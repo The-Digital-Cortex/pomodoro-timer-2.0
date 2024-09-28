@@ -11,26 +11,6 @@ const settingsModal = document.getElementById("settingsModal");
 const saveSettingsButton = document.getElementById("saveSettings");
 const closeModal = document.getElementById("closeModal");
 
-// Load settings from localStorage if they exist
-function loadSettings() {
-    const savedFocusTime = localStorage.getItem("focusTime");
-    const savedShortBreak = localStorage.getItem("shortBreakTime");
-    const savedLongBreak = localStorage.getItem("longBreakTime");
-    const savedFontColor = localStorage.getItem("fontColor");
-    const savedBackgroundColor = localStorage.getItem("backgroundColor");
-
-    if (savedFocusTime) focusTime = parseInt(savedFocusTime);
-    if (savedShortBreak) shortBreakTime = parseInt(savedShortBreak);
-    if (savedLongBreak) longBreakTime = parseInt(savedLongBreak);
-    if (savedFontColor) document.body.style.color = savedFontColor; // Apply to body text
-    if (savedBackgroundColor) {
-        document.body.style.backgroundColor = savedBackgroundColor; // Change background color
-        document.body.style.borderColor = savedBackgroundColor; // Change border color to match background
-    }
-
-    updateTimerDisplay(focusTime, 0); // Update display with loaded settings
-}
-
 // Event listeners for preset buttons
 document.getElementById("focusOption").addEventListener("click", () => {
     timeRemaining = focusTime * 60; // Set time for focus
@@ -76,11 +56,6 @@ saveSettingsButton.addEventListener("click", () => {
     shortBreakTime = parseInt(document.getElementById("shortBreak").value) || shortBreakTime;
     longBreakTime = parseInt(document.getElementById("longBreak").value) || longBreakTime;
 
-    // Save settings to localStorage
-    localStorage.setItem("focusTime", focusTime);
-    localStorage.setItem("shortBreakTime", shortBreakTime);
-    localStorage.setItem("longBreakTime", longBreakTime);
-
     // Update display when saving settings
     updateTimerDisplay(focusTime, 0);
     settingsModal.style.display = "none"; // Hide settings modal
@@ -89,12 +64,9 @@ saveSettingsButton.addEventListener("click", () => {
     const fontColor = document.getElementById("fontColor").value;
     const backgroundColor = document.getElementById("backgroundColor").value;
 
-    document.body.style.color = fontColor; // Change font color of the body
+    document.body.style.color = fontColor; // Change font color
     document.body.style.backgroundColor = backgroundColor; // Change background color
-
-    // Save color settings to localStorage
-    localStorage.setItem("fontColor", fontColor);
-    localStorage.setItem("backgroundColor", backgroundColor);
+    document.body.style.borderColor = backgroundColor; // Change border color to match background
 });
 
 // Timer function
@@ -127,6 +99,3 @@ function resetTimer() {
     timeRemaining = focusTime * 60; // Reset to default focus time
     updateTimerDisplay(focusTime, 0);
 }
-
-// Load settings on page load
-loadSettings();
