@@ -3,233 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pomodoro Timer</title>
-    <link rel="stylesheet" href="styles.css">
-    <style>
-        /* Full CSS from previous response included here */
-        /* Reset default button styles */
-        button {
-            background-color: #f0f0f0;
-            border: 1px solid #ccc;
-            color: black;
-            padding: 10px 20px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin: 5px;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-        
-        button:hover {
-            background-color: #e0e0e0;
-        }
-        
-        button:focus {
-            outline: none;
-        }
-        
-        button:active {
-            background-color: #d0d0d0;
-        }
-        
-        #settingsButton {
-            background-color: #007bff;
-            color: white;
-        }
-
-        body, html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-        }
-
-        .container {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100%;
-            background-color: #ffffff;
-        }
-
-        #timer {
-            font-size: 64px;
-            font-weight: bold;
-            margin: 20px 0;
-        }
-
-        .control-buttons {
-            display: flex;
-            gap: 10px;
-        }
-
-        #settings {
-            display: none;
-            background-color: white;
-            border: 2px solid #ccc;
-            padding: 20px;
-            border-radius: 10px;
-            position: absolute;
-            z-index: 999;
-        }
-
-        .overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 998;
-        }
-
-        .show {
-            display: block;
-        }
-
-        .full-page {
-            height: 100%;
-            width: 100%;
-            background-color: #f5f5f5; /* Default color */
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
-<body class="full-page">
+<body>
     <div class="container">
-        <div id="timer">25:00</div>
+        <div class="button-container">
+            <button id="focusOption">Focus</button>
+            <button id="shortBreakOption">Short Break</button>
+            <button id="longBreakOption">Long Break</button>
+        </div>
+        <div id="timer">
+            <span id="minutes">25</span>:<span id="seconds">00</span>
+        </div>
         <div class="control-buttons">
-            <button id="focusButton">Focus</button>
-            <button id="shortBreakButton">Short Break</button>
-            <button id="longBreakButton">Long Break</button>
-            <button id="startButton">Start</button>
-            <button id="resetButton">Reset</button>
-            <button id="settingsButton">Settings</button>
+            <button id="start">Start</button>
+            <button id="reset">Reset</button>
+            <button id="settings">Settings</button>
         </div>
     </div>
 
-    <div id="settings" class="settings-modal">
-        <h2>Settings</h2>
-        <form id="settingsForm">
-            <label for="focusTimeInput">Focus Time (minutes):</label>
-            <input type="number" id="focusTimeInput" value="25"><br>
-            <label for="shortBreakTimeInput">Short Break Time (minutes):</label>
-            <input type="number" id="shortBreakTimeInput" value="5"><br>
-            <label for="longBreakTimeInput">Long Break Time (minutes):</label>
-            <input type="number" id="longBreakTimeInput" value="15"><br>
-            <label for="backgroundColorInput">Background Color:</label>
-            <input type="color" id="backgroundColorInput" value="#f5f5f5"><br>
-            <label for="fontColorInput">Font Color:</label>
-            <input type="color" id="fontColorInput" value="#000000"><br>
-            <button type="submit">Save Settings</button>
-        </form>
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="modal">
+        <div class="modal-content">
+            <span id="closeModal">&times;</span>
+            <h2>Settings</h2>
+            <label for="focusTime">Focus Time (minutes):</label>
+            <input type="number" id="focusTime" value="25">
+            <label for="shortBreak">Short Break (minutes):</label>
+            <input type="number" id="shortBreak" value="5">
+            <label for="longBreak">Long Break (minutes):</label>
+            <input type="number" id="longBreak" value="15">
+            <label for="fontColor">Font Color:</label>
+            <input type="color" id="fontColor">
+            <label for="backgroundColor">Background Color:</label>
+            <input type="color" id="backgroundColor">
+            <button id="saveSettings">Save Settings</button>
+        </div>
     </div>
-    <div id="overlay" class="overlay"></div>
 
-    <script>
-        // Full JavaScript from previous response included here
-        document.addEventListener("DOMContentLoaded", function() {
-            let startButton = document.getElementById("startButton");
-            let resetButton = document.getElementById("resetButton");
-            let focusButton = document.getElementById("focusButton");
-            let shortBreakButton = document.getElementById("shortBreakButton");
-            let longBreakButton = document.getElementById("longBreakButton");
-            let settingsButton = document.getElementById("settingsButton");
-            let settingsModal = document.getElementById("settings");
-            let overlay = document.getElementById("overlay");
-            let timerElement = document.getElementById("timer");
-            let pageContainer = document.querySelector(".full-page");
-
-            let time = 1500; // Default time in seconds (25 minutes)
-            let countdownInterval = null;
-
-            let focusTime = 1500; // 25 minutes
-            let shortBreakTime = 300; // 5 minutes
-            let longBreakTime = 900; // 15 minutes
-
-            function updateTimerDisplay() {
-                let minutes = Math.floor(time / 60);
-                let seconds = time % 60;
-                timerElement.textContent = `${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
-            }
-
-            function startTimer() {
-                if (countdownInterval === null) {
-                    countdownInterval = setInterval(() => {
-                        if (time > 0) {
-                            time--;
-                            updateTimerDisplay();
-                        } else {
-                            stopTimer();
-                        }
-                    }, 1000);
-                }
-            }
-
-            function stopTimer() {
-                clearInterval(countdownInterval);
-                countdownInterval = null;
-            }
-
-            focusButton.addEventListener("click", function() {
-                time = focusTime;
-                updateTimerDisplay();
-                stopTimer(); // Ensure timer doesn't start automatically
-            });
-
-            shortBreakButton.addEventListener("click", function() {
-                time = shortBreakTime;
-                updateTimerDisplay();
-                stopTimer(); // Ensure timer doesn't start automatically
-            });
-
-            longBreakButton.addEventListener("click", function() {
-                time = longBreakTime;
-                updateTimerDisplay();
-                stopTimer(); // Ensure timer doesn't start automatically
-            });
-
-            startButton.addEventListener("click", function() {
-                startTimer();
-            });
-
-            resetButton.addEventListener("click", function() {
-                stopTimer();
-                time = focusTime; // Reset to default focus time
-                updateTimerDisplay();
-            });
-
-            settingsButton.addEventListener("click", function() {
-                settingsModal.classList.toggle("show");
-                overlay.classList.toggle("show");
-            });
-
-            overlay.addEventListener("click", function() {
-                settingsModal.classList.remove("show");
-                overlay.classList.remove("show");
-            });
-
-            document.getElementById("settingsForm").addEventListener("submit", function(event) {
-                event.preventDefault();
-
-                focusTime = parseInt(document.getElementById("focusTimeInput").value) * 60;
-                shortBreakTime = parseInt(document.getElementById("shortBreakTimeInput").value) * 60;
-                longBreakTime = parseInt(document.getElementById("longBreakTimeInput").value) * 60;
-
-                let backgroundColor = document.getElementById("backgroundColorInput").value;
-                let fontColor = document.getElementById("fontColorInput").value;
-
-                pageContainer.style.backgroundColor = backgroundColor;
-                timerElement.style.color = fontColor;
-
-                settingsModal.classList.remove("show");
-                overlay.classList.remove("show");
-            });
-
-            updateTimerDisplay();
-        });
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
