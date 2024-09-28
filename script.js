@@ -52,21 +52,24 @@ document.addEventListener("DOMContentLoaded", function() {
         updateTimerDisplay();
     });
 
-    // Event Delegation: Attach event listener for focus, short break, and long break buttons
-    document.addEventListener("click", function(event) {
-        if (event.target.id === "focusButton") {
-            time = focusTime;
-            updateTimerDisplay();
-            stopTimer(); // Ensure timer doesn't start automatically
-        } else if (event.target.id === "shortBreakButton") {
-            time = shortBreakTime;
-            updateTimerDisplay();
-            stopTimer(); // Ensure timer doesn't start automatically
-        } else if (event.target.id === "longBreakButton") {
-            time = longBreakTime;
-            updateTimerDisplay();
-            stopTimer(); // Ensure timer doesn't start automatically
-        }
+    // Function to set the timer based on the button clicked
+    function setTimer(newTime) {
+        time = newTime;
+        updateTimerDisplay();
+        stopTimer(); // Ensure timer doesn't start automatically
+    }
+
+    // Attach event listeners for focus, short break, and long break buttons
+    document.getElementById("focusButton").addEventListener("click", function() {
+        setTimer(focusTime);
+    });
+
+    document.getElementById("shortBreakButton").addEventListener("click", function() {
+        setTimer(shortBreakTime);
+    });
+
+    document.getElementById("longBreakButton").addEventListener("click", function() {
+        setTimer(longBreakTime);
     });
 
     // Initialize timer display
