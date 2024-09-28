@@ -29,7 +29,7 @@ document.getElementById("longBreakOption").addEventListener("click", () => {
 
 // Start button functionality
 document.getElementById("start").addEventListener("click", () => {
-    if (!isRunning) {
+    if (!isRunning && timeRemaining > 0) {
         startTimer();
     }
 });
