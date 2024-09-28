@@ -11,7 +11,6 @@ document.addEventListener("DOMContentLoaded", function() {
     const timerElement = document.getElementById("timer");
     const startButton = document.getElementById("startButton");
     const resetButton = document.getElementById("resetButton");
-    const pageContainer = document.querySelector(".full-page");
 
     // Function to update the timer display
     function updateTimerDisplay() {
@@ -59,17 +58,15 @@ document.addEventListener("DOMContentLoaded", function() {
         stopTimer(); // Ensure timer doesn't start automatically
     }
 
-    // Attach event listeners for focus, short break, and long break buttons
-    document.getElementById("focusButton").addEventListener("click", function() {
-        setTimer(focusTime);
-    });
-
-    document.getElementById("shortBreakButton").addEventListener("click", function() {
-        setTimer(shortBreakTime);
-    });
-
-    document.getElementById("longBreakButton").addEventListener("click", function() {
-        setTimer(longBreakTime);
+    // Delegated event listener for timer buttons
+    document.addEventListener("click", function(event) {
+        if (event.target.matches("#focusButton")) {
+            setTimer(focusTime);
+        } else if (event.target.matches("#shortBreakButton")) {
+            setTimer(shortBreakTime);
+        } else if (event.target.matches("#longBreakButton")) {
+            setTimer(longBreakTime);
+        }
     });
 
     // Initialize timer display
