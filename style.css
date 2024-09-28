@@ -19,7 +19,8 @@ body {
 }
 
 #timer {
-    font-size: 48px; /* Adjust font size for timer */
+    font-size: 120px; /* Increase font size for timer */
+    font-weight: bold; /* Make the font bold for better visibility */
 }
 
 .control-buttons {
