@@ -25,17 +25,17 @@ function updateTimerDisplay(minutes, seconds) {
 
 // Set focus time on button click
 focusOption.addEventListener("click", () => {
-    updateTimerDisplay(focusTime, 0); // Update display to focus time without starting the timer
+    updateTimerDisplay(focusTime, 0); // Update display to focus time
 });
 
 // Set short break time on button click
 shortBreakOption.addEventListener("click", () => {
-    updateTimerDisplay(shortBreakTime, 0); // Update display to short break time without starting the timer
+    updateTimerDisplay(shortBreakTime, 0); // Update display to short break time
 });
 
 // Set long break time on button click
 longBreakOption.addEventListener("click", () => {
-    updateTimerDisplay(longBreakTime, 0); // Update display to long break time without starting the timer
+    updateTimerDisplay(longBreakTime, 0); // Update display to long break time
 });
 
 // Start the timer when the start button is clicked
