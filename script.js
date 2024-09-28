@@ -1,101 +1,119 @@
-let focusTime = 25; // Default focus time in minutes
-let shortBreakTime = 5; // Default short break time in minutes
-let longBreakTime = 15; // Default long break time in minutes
-let timer; // Timer variable
-let isRunning = false; // Timer state
-let timeRemaining; // Time remaining in seconds
+document.addEventListener("DOMContentLoaded", function() {
+    // Select elements from the DOM
+    let startButton = document.getElementById("startButton");
+    let resetButton = document.getElementById("resetButton");
+    let focusButton = document.getElementById("focusButton");
+    let shortBreakButton = document.getElementById("shortBreakButton");
+    let longBreakButton = document.getElementById("longBreakButton");
+    let settingsButton = document.getElementById("settingsButton");
+    let settingsModal = document.getElementById("settings");
+    let overlay = document.getElementById("overlay");
+    let timerElement = document.getElementById("timer");
+    let pageContainer = document.querySelector(".full-page");
 
-const minutesDisplay = document.getElementById("minutes");
-const secondsDisplay = document.getElementById("seconds");
-const settingsModal = document.getElementById("settingsModal");
-const saveSettingsButton = document.getElementById("saveSettings");
-const closeModal = document.getElementById("closeModal");
+    // Timer variables
+    let time = 1500; // Default time in seconds (25 minutes)
+    let countdownInterval = null;
 
-// Event listeners for preset buttons
-document.getElementById("focusOption").addEventListener("click", () => {
-    timeRemaining = focusTime * 60; // Set time for focus
-    updateTimerDisplay(focusTime, 0); // Update display
-});
+    // Default timer values
+    let focusTime = 1500; // 25 minutes
+    let shortBreakTime = 300; // 5 minutes
+    let longBreakTime = 900; // 15 minutes
 
-document.getElementById("shortBreakOption").addEventListener("click", () => {
-    timeRemaining = shortBreakTime * 60; // Set time for short break
-    updateTimerDisplay(shortBreakTime, 0); // Update display
-});
-
-document.getElementById("longBreakOption").addEventListener("click", () => {
-    timeRemaining = longBreakTime * 60; // Set time for long break
-    updateTimerDisplay(longBreakTime, 0); // Update display
-});
-
-// Start button functionality
-document.getElementById("start").addEventListener("click", () => {
-    if (!isRunning) {
-        startTimer();
+    // Function to update the timer display
+    function updateTimerDisplay() {
+        let minutes = Math.floor(time / 60);
+        let seconds = time % 60;
+        timerElement.textContent = `${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
     }
-});
 
-// Reset button functionality
-document.getElementById("reset").addEventListener("click", () => {
-    resetTimer();
-});
-
-// Open settings modal
-document.getElementById("settings").addEventListener("click", () => {
-    settingsModal.style.display = "block";
-});
-
-// Close settings modal
-closeModal.addEventListener("click", () => {
-    settingsModal.style.display = "none";
-});
-
-// Save settings when the save button is clicked
-saveSettingsButton.addEventListener("click", () => {
-    // Update time values from input fields
-    focusTime = parseInt(document.getElementById("focusTime").value) || focusTime;
-    shortBreakTime = parseInt(document.getElementById("shortBreak").value) || shortBreakTime;
-    longBreakTime = parseInt(document.getElementById("longBreak").value) || longBreakTime;
-
-    // Update display when saving settings
-    updateTimerDisplay(focusTime, 0);
-    settingsModal.style.display = "none"; // Hide settings modal
-
-    // Update the color settings
-    const fontColor = document.getElementById("fontColor").value;
-    const backgroundColor = document.getElementById("backgroundColor").value;
-
-    document.body.style.color = fontColor; // Change font color
-    document.body.style.backgroundColor = backgroundColor; // Change background color
-    document.body.style.borderColor = backgroundColor; // Change border color to match background
-});
-
-// Timer function
-function startTimer() {
-    if (timeRemaining <= 0) return; // Prevent starting if no time left
-    isRunning = true;
-
-    timer = setInterval(() => {
-        if (timeRemaining <= 0) {
-            clearInterval(timer);
-            isRunning = false;
-            alert("Time's up!");
-            return;
+    // Function to start the countdown
+    function startTimer() {
+        if (countdownInterval === null) {
+            countdownInterval = setInterval(() => {
+                if (time > 0) {
+                    time--;
+                    updateTimerDisplay();
+                } else {
+                    stopTimer();
+                }
+            }, 1000);
         }
-        timeRemaining--; // Decrease remaining time
-        updateTimerDisplay(Math.floor(timeRemaining / 60), timeRemaining % 60); // Update display
-    }, 1000);
-}
+    }
 
-// Update timer display
-function updateTimerDisplay(minutes, seconds) {
-    minutesDisplay.textContent = String(minutes).padStart(2, '0'); // Display minutes
-    secondsDisplay.textContent = String(seconds).padStart(2, '0'); // Display seconds
-}
+    // Function to stop the countdown
+    function stopTimer() {
+        clearInterval(countdownInterval);
+        countdownInterval = null;
+    }
 
-// Reset timer function
-function resetTimer() {
-    clearInterval(timer);
-    isRunning = false;
-    timeRemaining = focusTime * 60; // Reset to default focus time
-    updateTimerDisplay(focusTime, 0);
-}
+    // Handle focus button click
+    focusButton.addEventListener("click", function() {
+        time = focusTime;
+        updateTimerDisplay();
+        stopTimer(); // Ensure timer doesn't start automatically
+    });
+
+    // Handle short break button click
+    shortBreakButton.addEventListener("click", function() {
+        time = shortBreakTime;
+        updateTimerDisplay();
+        stopTimer(); // Ensure timer doesn't start automatically
+    });
+
+    // Handle long break button click
+    longBreakButton.addEventListener("click", function() {
+        time = longBreakTime;
+        updateTimerDisplay();
+        stopTimer(); // Ensure timer doesn't start automatically
+    });
+
+    // Handle start button click
+    startButton.addEventListener("click", function() {
+        startTimer();
+    });
+
+    // Handle reset button click
+    resetButton.addEventListener("click", function() {
+        stopTimer();
+        time = focusTime; // Reset to default focus time
+        updateTimerDisplay();
+    });
+
+    // Handle settings button click (toggle modal)
+    settingsButton.addEventListener("click", function() {
+        settingsModal.classList.toggle("show");
+        overlay.classList.toggle("show");
+    });
+
+    // Handle closing settings modal when overlay is clicked
+    overlay.addEventListener("click", function() {
+        settingsModal.classList.remove("show");
+        overlay.classList.remove("show");
+    });
+
+    // Handle settings form submission (apply new times and colors)
+    document.getElementById("settingsForm").addEventListener("submit", function(event) {
+        event.preventDefault();
+
+        // Get new time values
+        focusTime = parseInt(document.getElementById("focusTimeInput").value) * 60;
+        shortBreakTime = parseInt(document.getElementById("shortBreakTimeInput").value) * 60;
+        longBreakTime = parseInt(document.getElementById("longBreakTimeInput").value) * 60;
+
+        // Get new colors
+        let backgroundColor = document.getElementById("backgroundColorInput").value;
+        let fontColor = document.getElementById("fontColorInput").value;
+
+        // Apply new colors to the page and timer
+        pageContainer.style.backgroundColor = backgroundColor;
+        timerElement.style.color = fontColor;
+
+        // Close the settings modal
+        settingsModal.classList.remove("show");
+        overlay.classList.remove("show");
+    });
+
+    // Initialize timer display
+    updateTimerDisplay();
+});
