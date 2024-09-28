@@ -27,6 +27,7 @@ body {
 #timer {
     font-size: 48px; /* Adjust font size for timer */
     margin-bottom: 20px; /* Spacing below timer */
+    font-family: Arial, sans-serif; /* Font for timer */
 }
 
 .control-buttons {
@@ -40,10 +41,14 @@ button {
     border: none; /* Remove default border */
     border-radius: 5px; /* Rounded corners for buttons */
     cursor: pointer; /* Pointer cursor on hover */
+    font-family: Arial, sans-serif; /* Font for buttons */
+    background-color: #f0f0f0; /* Default background color for buttons */
+    color: black; /* Font color for buttons */
+    transition: background-color 0.3s; /* Smooth transition for background color */
 }
 
 button:hover {
-    background-color: #f0f0f0; /* Light grey background on hover */
+    background-color: #e0e0e0; /* Darker grey background on hover */
 }
 
 .modal {
