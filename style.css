@@ -44,7 +44,10 @@ body {
     padding: 20px; /* Padding for content */
     border: 1px solid #888; /* Border for modal */
     width: 80%; /* Width of modal */
-    color: black; /* Ensures modal text color is black */
+}
+
+.modal-content * {
+    color: black !important; /* Ensure all text inside modal remains black */
 }
 
 .close {
