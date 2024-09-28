@@ -12,10 +12,6 @@ body {
 
 .container {
     text-align: center; /* Center content */
-    display: flex; /* Use flexbox to center vertically */
-    flex-direction: column; /* Stack elements vertically */
-    justify-content: center; /* Center items vertically */
-    align-items: center; /* Center items horizontally */
 }
 
 .button-container {
@@ -48,6 +44,7 @@ body {
     padding: 20px; /* Padding for content */
     border: 1px solid #888; /* Border for modal */
     width: 80%; /* Width of modal */
+    color: black; /* Ensures modal text color is black */
 }
 
 .close {
