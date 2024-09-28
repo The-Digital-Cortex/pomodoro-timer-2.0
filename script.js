@@ -23,19 +23,22 @@ function updateTimerDisplay(minutes, seconds) {
     secondsDisplay.textContent = String(seconds).padStart(2, '0');
 }
 
-// Set focus time on button click
+// Set focus time on button click without starting the timer
 focusOption.addEventListener("click", () => {
     updateTimerDisplay(focusTime, 0); // Update display to focus time
+    // Ensure timer doesn't start
 });
 
-// Set short break time on button click
+// Set short break time on button click without starting the timer
 shortBreakOption.addEventListener("click", () => {
     updateTimerDisplay(shortBreakTime, 0); // Update display to short break time
+    // Ensure timer doesn't start
 });
 
-// Set long break time on button click
+// Set long break time on button click without starting the timer
 longBreakOption.addEventListener("click", () => {
     updateTimerDisplay(longBreakTime, 0); // Update display to long break time
+    // Ensure timer doesn't start
 });
 
 // Start the timer when the start button is clicked
