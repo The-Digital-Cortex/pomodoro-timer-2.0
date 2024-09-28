@@ -4,6 +4,8 @@ body {
     align-items: center;
     height: 100vh; /* Full height */
     margin: 0; /* Remove default margin */
+    border: 10px solid transparent; /* Invisible border by default */
+    transition: background-color 0.3s, border-color 0.3s; /* Smooth transitions for color changes */
     background-color: white; /* Default background color */
     color: black; /* Default font color */
 }
@@ -18,7 +20,6 @@ body {
 
 #timer {
     font-size: 48px; /* Adjust font size for timer */
-    padding: 20px; /* Padding for the timer */
 }
 
 .control-buttons {
@@ -34,7 +35,6 @@ body {
     width: 100%; /* Full width */
     height: 100%; /* Full height */
     overflow: auto; /* Enable scroll if needed */
-    background-color: rgb(0,0,0); /* Fallback color */
     background-color: rgba(0,0,0,0.4); /* Black with transparency */
 }
 
@@ -44,4 +44,8 @@ body {
     padding: 20px; /* Padding for content */
     border: 1px solid #888; /* Border for modal */
     width: 80%; /* Width of modal */
+}
+
+#closeModal {
+    float: right;
 }
