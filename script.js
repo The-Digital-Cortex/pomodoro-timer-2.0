@@ -118,7 +118,8 @@ saveSettingsButton.addEventListener('click', () => {
 
     // Apply font and background color
     document.body.style.color = fontColor;
-    document.body.style.backgroundColor = backgroundColor;
+    document.body.style.backgroundColor = backgroundColor;  // Set background color of body
+    document.querySelector('.container').style.backgroundColor = backgroundColor;  // Set background color of the container
 
     settingsModal.style.display = "none";
 });
