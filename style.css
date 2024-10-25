@@ -4,7 +4,6 @@ body {
     align-items: center;
     height: 100vh; /* Full height */
     margin: 0; /* Remove default margin */
-    border: 10px solid black; /* Default border */
     transition: border-color 0.3s; /* Smooth transition for border color */
     background-color: white; /* Default background color */
     color: black; /* Default font color */
